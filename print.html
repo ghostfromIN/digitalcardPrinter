@@ -1,0 +1,392 @@
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Voter Card Downloader</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Hind" rel="stylesheet">
+
+    <style>
+        .firstpage {
+            background-image: url("source/voterhindifront.jpg");
+            height: 500px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 30px;
+            width: 320px;
+            float: none;
+            border-radius: 10px;
+            border: 3px dotted black;
+            position: relative;
+            font-size: 14px;
+            margin-bottom: 20px;
+
+        }
+
+        .secondpage {
+            background-image: url(source/voterhindiback.jpg);
+            height: 500px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-right: 30px;
+            border-radius: 10px;
+            border: 3px dotted black;
+            width: 320px;
+            float: none;
+            position: relative;
+        }
+    </style>
+
+    <style>
+        @font-face {
+            font-family: mangal;
+            src: url(source/MANGAL.TTF);
+        }
+
+        main.bg {
+            font-family: 'arial', mangal;
+            font-weight: 600;
+        }
+
+        .secondpage {
+            font-size: 9px;
+            font-weight: 600;
+            box-sizing: border-box;
+            padding: 14px;
+        }
+
+        .gender span.label,
+        .dob span.label {
+            width: 116px;
+            display: inline-block;
+        }
+
+        .imagecontainer {
+            position: absolute;
+            top: 123px;
+            left: 91px;
+        }
+
+        img.picture {
+            width: 140px;
+            height: 186px;
+        }
+
+        img.barcode {
+            width: 101px;
+            height: 23px;
+            position: absolute;
+            top: 85px;
+            left: 61px;
+        }
+
+        .epicnumber {
+            position: absolute;
+            top: 82px;
+            left: 175px;
+        }
+
+        .settable {
+            position: absolute;
+            top: 331px;
+            left: 25px;
+        }
+
+        .tablecss {
+            font-family: arial;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .gender span.value {
+            text-transform: capitalize;
+        }
+
+        .secondpage .gender {
+            margin-bottom: 4px;
+        }
+
+        .secondpage .dob {
+            position: relative;
+            margin-bottom: 4px;
+        }
+
+        .secondpage .dob span.value {
+            top: -5px;
+            position: relative;
+        }
+
+        .address_regional {
+            margin-bottom: 5px;
+        }
+
+        .address {
+            margin-bottom: 60px;
+        }
+
+        .nirvachan .date {
+            width: 100px;
+            float: left;
+        }
+
+        .nirvachan .nirvachanofficer {
+            float: right;
+            width: 160px;
+            text-align: right;
+            position: relative;
+        }
+
+        img.officersign {
+            position: absolute;
+            top: -69px;
+            left: 20px;
+        }
+
+        .nirvachan:before,
+        .nirvachan:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+
+        .nirvachan {
+            margin-bottom: 10px;
+        }
+
+        .assemballysankhya .regional {
+            margin-bottom: 4px;
+        }
+
+        .assemballysankhya {
+            margin-bottom: 10px;
+        }
+
+        .bhagsankhya .regional {
+            margin-bottom: 4px;
+        }
+
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        @page {
+            size: auto;
+            margin: 0mm;
+        }
+
+        @media print {
+            a[href]:after {
+                content: none !important;
+            }
+        }
+
+        @media print {
+
+            .header,
+            .hide {
+                visibility: hidden
+            }
+
+            form.bootom-form {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <main class="bg">
+
+        <div class="row ml-5 mt-5" id="content-area" style="margin-left:100px;">
+
+            <div class="firstpage">
+
+                <img id="barcodeImg" class="barcode">
+
+                <div class="epicnumber" id="epicNo"></div>
+
+                <div class="imagecontainer">
+                    <img id="photo" class="picture">
+                </div>
+
+                <div class="settable">
+                    <table class="tablecss">
+                        <tbody>
+                            <tr>
+                                <td style="padding-bottom: 15px;">नाम</td>
+                                <td style="padding-bottom: 15px;" id="nameLocal"></td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding-bottom: 15px;">Name</td>
+                                <td style="padding-bottom: 15px;" id="nameEnglish"></td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding-bottom: 15px;" id="relationLabelLocal">पति/पिता का नाम</td>
+                                <td style="padding-bottom: 15px;" id="relationLocal"></td>
+                            </tr>
+
+                            <tr>
+                                <td id="relationLabelEnglish">Father/Husband Name</td>
+                                <td id="relationEnglish"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="secondpage">
+
+                <div class="gender">
+                    <span class="label">सेक्स/Sex</span>
+                    <span class="value" id="gender"></span>
+                </div>
+
+                <div class="dob">
+                    <span class="label">जन्मतिथि/आयु <br>Date Of Birth/Age</span>
+                    <span class="value" id="age"></span>
+                </div>
+
+                <div class="address_regional">
+                    <span class="label">पता :</span>
+                    <span class="value" id="addressLocal"></span>
+                </div>
+
+                <div class="address">
+                    <span class="label">Address :</span>
+                    <span class="value" id="addressEnglish"></span>
+                </div>
+
+                <div class="nirvachan">
+
+                    <div class="date">
+                        <span class="label">Date:</span>
+                        <span class="value" id="date"></span>
+                    </div>
+
+                    <div class="nirvachanofficer">
+                        <img class="officersign" src="source/votersign2.png">
+                        <span class="label">निर्वाचक रजिस्ट्रीकरण अधिकारी<br>Electoral Registration Officer</span>
+                    </div>
+
+                </div>
+
+                <div class="assemballysankhya">
+
+                    <div class="regional">
+                        <span class="label">विधानसभा :</span>
+                        <span class="value" id="assemblyLocal"></span>
+                    </div>
+
+                    <div class="actual">
+                        Assembly Constituency :
+                        <span class="value" id="assemblyEnglish"></span>
+                    </div>
+
+                </div>
+
+                <div class="bhagsankhya">
+
+                    <div class="regional">
+                        <span class="label">भाग :</span>
+                        <span class="value" id="partLocal"></span>
+                    </div>
+
+                    <div class="actual">
+                        Part No. & Name :
+                        <span class="value" id="partEnglish"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+<script>
+    const dbName = "VoterDB";
+    const storeName = "VoterData";
+
+    function openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(dbName, 1);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function loadAndPrint() {
+        const db = await openDB();
+        const tx = db.transaction(storeName, "readonly");
+        const store = tx.objectStore(storeName);
+        const request = store.get("current");
+
+        request.onsuccess = function () {
+            const data = request.result;
+
+            if (!data) {
+                alert("No data found!");
+                return;
+            }
+
+            // ===== FRONT =====
+            document.getElementById("epicNo").textContent = data.epicNo || "";
+            document.getElementById("photo").src = data.photo || "";
+
+            // Names (Check if data.name exists, otherwise fallback to empty)
+            document.getElementById("nameLocal").textContent = ": " + (data.nameLocal || "");
+            document.getElementById("nameEnglish").textContent = ": " + (data.name || "");
+
+            // ===== RELATION LOGIC =====
+            let isFather = data.fatherHusband === "Father";
+            let relationLabelLocal = isFather ? "पिता का नाम" : "पति का नाम";
+            let relationLabelEng = isFather ? "Father Name" : "Husband Name";
+
+            document.getElementById("relationLabelLocal").textContent = relationLabelLocal;
+            document.getElementById("relationLabelEnglish").textContent = relationLabelEng;
+
+            // Relation Values with Colon
+            document.getElementById("relationLocal").textContent = ": " + (data.fhNameLocal || "");
+            document.getElementById("relationEnglish").textContent = ": " + (data.fhName || "");
+
+            // ===== BACK =====
+            document.getElementById("gender").textContent = ": " + (data.gender || "");
+            document.getElementById("age").textContent = ": " + (data.age || "");
+
+            document.getElementById("addressLocal").textContent = ": " + (data.addressLocal || "");
+            document.getElementById("addressEnglish").textContent = ": " + (data.address || "");
+
+            document.getElementById("assemblyLocal").textContent = ": " + (data.assemblyConstLocal || "");
+            document.getElementById("assemblyEnglish").textContent = ": " + (data.assemblyConst || "");
+
+            document.getElementById("partLocal").textContent = ": " + (data.partNameLocal || "");
+            document.getElementById("partEnglish").textContent = ": " + (data.partName || "");
+
+            document.getElementById("date").textContent = ": " + new Date().toLocaleDateString("en-GB");
+
+            // ===== BARCODE =====
+            if (data.epicNo) {
+                document.getElementById("barcodeImg").src =
+                    "https://bwipjs-api.metafloor.com/?bcid=code128&text=" + data.epicNo;
+            }
+
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        };
+    }
+
+    loadAndPrint();
+</script>
+
+</html>

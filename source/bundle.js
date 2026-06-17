@@ -1,0 +1,120 @@
+const dbName = "VoterDB";
+const storeName = "VoterData";
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName, 1);
+
+    request.onupgradeneeded = function (event) {
+      const db = event.target.result;
+
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, {
+          keyPath: "id",
+        });
+      }
+    };
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      resolve("");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const photoBase64 = await fileToBase64(photo.files[0]);
+
+  const voterData = {
+    id: "current",
+
+    epicNo: epicNo.value,
+    name: nameMain.value,
+    nameLocal: nameLocal.value,
+
+    age: age.value,
+    gender: gender.value,
+
+    houseNo: houseNo.value,
+
+    fatherHusband: fatherHusband.value,
+    fhName: fhName.value,
+    fhNameLocal: fhNameLocal.value,
+
+    tahshil: tahshil.value,
+    district: district.value,
+
+    assemblyConst: assemblyConst.value,
+    assemblyConstLocal: assemblyConstLocal.value,
+
+    partNumber: partNumber.value,
+    partName: partName.value,
+    partNameLocal: partNameLocal.value,
+
+    language: language.value,
+
+    address: address.value,
+    addressLocal: addressLocal.value,
+
+    photo: photoBase64,
+
+    createdAt: Date.now(),
+  };
+
+  const db = await openDB();
+
+  const tx = db.transaction(storeName, "readwrite");
+
+  const store = tx.objectStore(storeName);
+
+  store.put(voterData);
+
+  tx.oncomplete = () => {
+    console.log("Data Saved");
+    alert("Data Saved Successfully");
+
+    window.open("print.html", "_blank");
+  };
+
+  tx.onerror = () => {
+    console.error("Save Failed");
+  };
+});
+
+document.getElementById("clearBtn").addEventListener("click", async () => {
+  // Form Clear
+  document.querySelectorAll("input").forEach((input) => {
+    input.value = "";
+  });
+
+  document.querySelectorAll("select").forEach((select) => {
+    select.selectedIndex = 0;
+  });
+
+  // DB Clear
+  const db = await openDB();
+
+  const tx = db.transaction("VoterData", "readwrite");
+
+  const store = tx.objectStore("VoterData");
+
+  store.delete("current");
+
+  tx.oncomplete = () => {
+    alert("Form & Saved Data Cleared");
+  };
+});
